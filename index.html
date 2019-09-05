@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>emogif</title>
+  <style>
+    #container {
+      position: relative;
+      margin:0px;
+      padding:0px;
+    }
+    #overlay {
+      position:absolute;
+      margin:0px;
+      width:128px;
+      min-height:128px;
+      background-color: #ff222266;
+      z-index:300000;
+    }
+    #box {
+      position:absolute;
+      margin:0px;
+      width: 800px;
+      height: 800px;
+      background-color: #888888;
+    }
+  </style>
+  <script src="./index.js"></script>
+</head>
+<body>
+  <div id="container">
+    <div id="overlay"></div>
+    <div id="box"></div>
+</div>
+</body>
+</html>
