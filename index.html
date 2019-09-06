@@ -13,9 +13,22 @@
       position:absolute;
       margin:0px;
       width:128px;
-      min-height:128px;
+      height:128px;
+      min-width:16px;
+      min-height:16px;
       background-color: #ff222266;
-      z-index:300000;
+      z-index:100;
+    }
+    #corner {
+      position:absolute;
+      margin:0px;
+      width:16px;
+      height:16px;
+      min-width:16px;
+      min-height:16px;
+      background-color: #ff4444ff;
+      z-index:200;
+      cursor: e-resize;
     }
   </style>
   <script src="./crop.js"></script>
@@ -24,6 +37,7 @@
 <body>
   <div id="container">
     <div id="overlay"></div>
+    <div id="corner"></div>
     <video id="video" controls>
       <source id="source" src="./hoge.mp4" type="video/mp4">
     </video>
