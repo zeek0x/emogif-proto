@@ -19,7 +19,7 @@
 
     function init() {
       timer.min = start.min = end.min = 0;
-      timer.max = start.max = end.max = video.duration / timeUnit;
+      timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
       timer.steps = start.steps = end.steps = parseInt(video.duration) / timeUnit;
       setElementW(timer, video.clientWidth);
       setElementW(start, video.clientWidth);
@@ -44,7 +44,7 @@
       }
     });
 
-    function handleInputEvent(event) { 
+    function handleInputEvent(event) {
       video.currentTime = parseInt(this.value) * timeUnit;
     }
 
@@ -142,14 +142,14 @@
       var p = getPosition(overlay, container);
 
       var input = source.src;
-      var start = 0;
-      var duration = 10;
-      var x = p.x
-      var y = p.y
+      var ss = parseInt(start.value) * timeUnit;
+      var duration = parseInt(start.value) - parseInt(end.value) * timeUnit;
+      var x = p.x;
+      var y = p.y;
       var w = s.w;
       var h = s.h;
 
-      var option = cropOption(input, start, duration, x, y, w, h);
+      var option = cropOption(input, ss, duration, x, y, w, h);
       cropExec(option, "./output.gif");
     }
 
