@@ -3,6 +3,10 @@
 
   win.onload = function() {
     // global
+    var timeUnit = 0.1;
+    var timer = document.getElementById("timer");
+    var start = document.getElementById("start");
+    var end = document.getElementById("end");
     var container = document.getElementById("container");
     var overlay = document.getElementById("overlay");
     var corner = document.getElementById("corner");
@@ -14,9 +18,41 @@
     init();
 
     function init() {
+      timer.value = 0;
+      timer.min = start.min = end.min = 0;
+      timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
+      timer.steps = start.steps = end.steps = parseInt(video.duration) / timeUnit;
+      setElementW(timer, video.clientWidth);
+      setElementW(start, video.clientWidth);
+      setElementW(end, video.clientWidth);
       setElementX(overlay, 0);
       setElementY(overlay, 0); 
       setCornerPosition();
+    }
+
+    // ============================================================
+    // Slider
+    // ============================================================
+
+    timer.addEventListener("input", handleInputEvent, false);
+    start.addEventListener("input", handleInputEvent, false);
+    end.addEventListener("input", handleInputEvent, false);
+    video.addEventListener("click", handleClickEvent, false);
+
+    // Custom Property for "Video is Playing"
+    Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
+      get: function() {
+        return this.currentTime > 0 && !this.paused && !this.ended;
+      }
+    });
+
+    function handleInputEvent(event) {
+      video.currentTime = parseInt(this.value) * timeUnit;
+    }
+
+    function handleClickEvent() {
+      video.playing ? video.pause() : video.play();
+      timer.value = video.currentTime / timeUnit;
     }
 
     // ============================================================
@@ -108,15 +144,16 @@
       var p = getPosition(overlay, container);
 
       var input = source.src;
-      var start = 0;
-      var duration = 10;
-      var x = p.x
-      var y = p.y
+      var ss = parseInt(start.value) * timeUnit;
+      var duration = (parseInt(end.value) - parseInt(start.value)) * timeUnit;
+      var x = p.x;
+      var y = p.y;
       var w = s.w;
       var h = s.h;
 
-      var option = cropOption(input, start, duration, x, y, w, h);
-      cropExec(option, "./output.gif");
+      var option = cropOption(input, ss, duration, x, y, w, h);      
+      console.log(option);
+      cropExec(option, './output.gif');
     }
 
     // ============================================================
