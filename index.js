@@ -3,7 +3,7 @@
 
   win.onload = function() {
     // global
-    var timeUnit = 0.5;
+    var timeUnit = 0.1;
     var timer = document.getElementById("timer");
     var start = document.getElementById("start");
     var end = document.getElementById("end");
@@ -18,6 +18,7 @@
     init();
 
     function init() {
+      timer.value = 0;
       timer.min = start.min = end.min = 0;
       timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
       timer.steps = start.steps = end.steps = parseInt(video.duration) / timeUnit;
@@ -33,6 +34,7 @@
     // Slider
     // ============================================================
 
+    timer.addEventListener("input", handleInputEvent, false);
     start.addEventListener("input", handleInputEvent, false);
     end.addEventListener("input", handleInputEvent, false);
     video.addEventListener("click", handleClickEvent, false);
@@ -143,14 +145,15 @@
 
       var input = source.src;
       var ss = parseInt(start.value) * timeUnit;
-      var duration = parseInt(start.value) - parseInt(end.value) * timeUnit;
+      var duration = (parseInt(end.value) - parseInt(start.value)) * timeUnit;
       var x = p.x;
       var y = p.y;
       var w = s.w;
       var h = s.h;
 
-      var option = cropOption(input, ss, duration, x, y, w, h);
-      cropExec(option, "./output.gif");
+      var option = cropOption(input, ss, duration, x, y, w, h);      
+      console.log(option);
+      cropExec(option, './output.gif');
     }
 
     // ============================================================
