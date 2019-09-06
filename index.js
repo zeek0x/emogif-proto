@@ -5,33 +5,54 @@
     // global
     var container = document.getElementById("container");
     var overlay = document.getElementById("overlay");
+    var corner = document.getElementById("corner");
     var video = document.getElementById("video");
     var source = document.getElementById("source");
     var isDragging = false;
-    setElementX(overlay, 0);
-    setElementY(overlay, 0);
+    var isCornerDragging = false;
+
+    init();
+
+    function init() {
+      setElementX(overlay, 0);
+      setElementY(overlay, 0); 
+      setCornerPosition();
+    }
 
     // ============================================================
     // Drag Move
     // ============================================================
 
-    overlay.addEventListener('mousedown', handleMouseDonw, false);
+    overlay.addEventListener('mousedown', handleOverlayMouseDonw, false);
+    corner.addEventListener('mousedown', handleCornerMouseDown, false);
     document.addEventListener('mouseup', handleMouseUp, false);
     document.addEventListener('mousemove', handleMoveEvent, false);
 
-    function handleMouseDonw(event) {
+    function handleOverlayMouseDonw(event) {
       if(event.which === 1) {
         isDragging = true;
+      }
+    }
+
+    function handleCornerMouseDown(event) {
+      if(event.which === 1) {
+        isCornerDragging = true;
       }
     }
 
     function handleMouseUp(event) {
       if(event.which === 1) {
         isDragging = false;
+        isCornerDragging = false;
       }
     }
 
     function handleMoveEvent(event) {
+      move(event);
+      zoom(event);
+    }
+
+    function move(event) {
       if (!isDragging) {
         return;
       }
@@ -41,6 +62,28 @@
       var dy = event.movementY;
       setElementX(overlay, p.x + dx);
       setElementY(overlay, p.y + dy);
+      setCornerPosition(overlay);
+    }
+
+    function zoom(event) {
+      if (!isCornerDragging) {
+        return;
+      }
+
+      var s = getSize(overlay, container);
+      var dx = event.movementX;
+      setElementW(overlay, s.w + dx);
+      setElementH(overlay, s.w + dx);
+      setCornerPosition(overlay);
+    } 
+
+    function setCornerPosition() {
+      var p = getPosition(overlay, container);
+      var os = getSize(overlay);       
+      var cs = getSize(corner);
+      
+      setElementX(corner, p.x + os.w - cs.w);
+      setElementY(corner, p.y + os.h - cs.h);
     }
 
     // ============================================================
@@ -80,7 +123,7 @@
     // Element Util
     // ============================================================
 
-    function getSize(elem) {
+    function getSize(elem) {      
       var rect = elem.getBoundingClientRect();
       var w = rect.width;
       var h = rect.height;
@@ -96,11 +139,19 @@
     }
 
     function setElementX(e, x) {      
-      return e.style.left = x + 'px';
+      e.style.left = x + 'px';
     }
 
     function setElementY(e, y) {
-      return e.style.top = y + 'px';
+      e.style.top = y + 'px';
+    }
+
+    function setElementW(e, w) {
+      e.style.width = w + 'px';
+    }
+
+    function setElementH(e, h) {      
+      e.style.height = h + 'px';
     }
   }
 })(window);
