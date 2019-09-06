@@ -17,20 +17,16 @@
       background-color: #ff222266;
       z-index:300000;
     }
-    #box {
-      position:absolute;
-      margin:0px;
-      width: 800px;
-      height: 800px;
-      background-color: #888888;
-    }
   </style>
+  <script src="./crop.js"></script>
   <script src="./index.js"></script>
 </head>
 <body>
   <div id="container">
     <div id="overlay"></div>
-    <div id="box"></div>
-</div>
+    <video id="video" controls>
+      <source id="source" src="./hoge.mp4" type="video/mp4">
+    </video>
+  </div>
 </body>
 </html>
