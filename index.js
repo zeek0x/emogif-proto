@@ -5,6 +5,8 @@
     // global
     var container = document.getElementById("container");
     var overlay = document.getElementById("overlay");
+    var video = document.getElementById("video");
+    var source = document.getElementById("source");
     var isDragging = false;
     setElementX(overlay, 0);
     setElementY(overlay, 0);
@@ -61,6 +63,17 @@
     function handleCrop() {
       var s = getSize(overlay);
       var p = getPosition(overlay, container);
+
+      var input = source.src;
+      var start = 0;
+      var duration = 10;
+      var x = p.x
+      var y = p.y
+      var w = s.w;
+      var h = s.h;
+
+      var option = cropOption(input, start, duration, x, y, w, h);
+      cropExec(option, "./output.gif");
     }
 
     // ============================================================
