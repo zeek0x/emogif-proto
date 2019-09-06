@@ -4,7 +4,7 @@
   win.onload = function() {
     var container = document.getElementById("container");
     var overlay = document.getElementById("overlay");
-    var isDown = false;
+    var isDragging = false;
     setElementX(overlay, 0);
     setElementY(overlay, 0);
 
@@ -12,27 +12,61 @@
     document.addEventListener('mouseup', handleMouseUp, false);
     document.addEventListener('mousemove', handleMoveEvent, false);
 
-    function handleMouseDonw() {
-      isDown = true;
+    function handleMouseDonw(event) {
+      if(event.which === 1) {
+        isDragging = true;
+      }
     }
 
-    function handleMouseUp() {
-      isDown = false;
+    function handleMouseUp(event) {
+      if(event.which === 1) {
+        isDragging = false;
+      }
     }
 
     function handleMoveEvent(event) {
-      if (!isDown) {
+      if (!isDragging) {
         return;
       }
 
-      var rect1 = overlay.getBoundingClientRect();
-      var rect2 = container.getBoundingClientRect();
-      var x = rect1.x - rect2.x;
-      var y = rect1.y - rect2.y;
+      var p = getPosition(overlay, container);
       var dx = event.movementX;
       var dy = event.movementY;
-      setElementX(overlay, x + dx);
-      setElementY(overlay, y + dy);
+      setElementX(overlay, p.x + dx);
+      setElementY(overlay, p.y + dy);
+    }
+
+    var remote = require('electron').remote;
+    var Menu = remote.Menu;
+    var MenuItem = remote.MenuItem;
+    var template = [
+      { label: 'crop', click: handleCrop },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+ 
+    win.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+      menu.popup(remote.getCurrentWindow());
+    }, false);
+
+    function handleCrop() {
+      var s = getSize(overlay);
+      var p = getPosition(overlay, container);
+    }
+
+    function getSize(elem) {
+      var rect = elem.getBoundingClientRect();
+      var w = rect.width;
+      var h = rect.height;
+      return {w, h};
+    }
+
+    function getPosition(child, parent) {
+      var rect1 = child.getBoundingClientRect();
+      var rect2 = parent.getBoundingClientRect();
+      var x = rect1.x - rect2.x;
+      var y = rect1.y - rect2.y;
+      return {x, y};
     }
 
     function setElementX(e, x) {      
