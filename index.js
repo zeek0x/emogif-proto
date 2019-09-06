@@ -2,7 +2,7 @@
   'use strict'
 
   win.onload = function() {
-    var body = document.body;
+    var container = document.getElementById("container");
     var overlay = document.getElementById("overlay");
     var isDown = false;
     setElementX(overlay, 0);
@@ -26,7 +26,7 @@
       }
 
       var rect1 = overlay.getBoundingClientRect();
-      var rect2 = document.body.getBoundingClientRect();
+      var rect2 = container.getBoundingClientRect();
       var x = rect1.x - rect2.x;
       var y = rect1.y - rect2.y;
       var dx = event.movementX;
