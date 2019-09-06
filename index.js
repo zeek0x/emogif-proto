@@ -2,11 +2,16 @@
   'use strict'
 
   win.onload = function() {
+    // global
     var container = document.getElementById("container");
     var overlay = document.getElementById("overlay");
     var isDragging = false;
     setElementX(overlay, 0);
     setElementY(overlay, 0);
+
+    // ============================================================
+    // Drag Move
+    // ============================================================
 
     overlay.addEventListener('mousedown', handleMouseDonw, false);
     document.addEventListener('mouseup', handleMouseUp, false);
@@ -36,6 +41,10 @@
       setElementY(overlay, p.y + dy);
     }
 
+    // ============================================================
+    // Menu
+    // ============================================================
+    
     var remote = require('electron').remote;
     var Menu = remote.Menu;
     var MenuItem = remote.MenuItem;
@@ -53,6 +62,10 @@
       var s = getSize(overlay);
       var p = getPosition(overlay, container);
     }
+
+    // ============================================================
+    // Element Util
+    // ============================================================
 
     function getSize(elem) {
       var rect = elem.getBoundingClientRect();
