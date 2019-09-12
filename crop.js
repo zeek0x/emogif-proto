@@ -10,7 +10,6 @@ function cropOption(input, start, duration, x, y, w, h, fps, scale) {
 function cropExec(option, output) {
   const command = `ffmpeg ${option} ${output}`
   execSync(command);
-  console.log('Done.');
 }
 
 function getFileSize(filepath) {
