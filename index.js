@@ -4,6 +4,8 @@
   win.onload = function() {
     // global
     var timeUnit = 0.1;
+    var fps = document.getElementById("fps");
+    var scale = document.getElementById("scale");
     var timer = document.getElementById("timer");
     var start = document.getElementById("start");
     var end = document.getElementById("end");
@@ -18,10 +20,15 @@
     init();
 
     function init() {
+      fps.value = 10;
+      fps.min = scale.min = 1;
+      fps.max = 30; // TODO: set the video fps
+      scale.max = 100; // [%]
       timer.value = 0;
       timer.min = start.min = end.min = 0;
       timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
-      timer.steps = start.steps = end.steps = parseInt(video.duration) / timeUnit;
+      setElementW(fps, video.clientWidth/2.5);
+      setElementW(scale, video.clientWidth/2.5);
       setElementW(timer, video.clientWidth);
       setElementW(start, video.clientWidth);
       setElementW(end, video.clientWidth);
@@ -31,7 +38,7 @@
     }
 
     // ============================================================
-    // Slider
+    // Timer
     // ============================================================
 
     timer.addEventListener("input", handleInputEvent, false);
@@ -150,15 +157,24 @@
       var y = p.y;
       var w = s.w;
       var h = s.h;
+      var _fps = parseInt(fps.value);
+      var _scale = parseInt(getMaxVideoLength(video) * parseInt(scale.value) / 100);
 
-      var option = cropOption(input, ss, duration, x, y, w, h);      
-      console.log(option);
+      var option = cropOption(input, ss, duration, x, y, w, h, _fps, _scale);
       cropExec(option, './output.gif');
+      var fileSize = getFileSize('./output.gif')
+      console.log(option, `${fileSize/1000}KB`);
     }
 
     // ============================================================
     // Element Util
     // ============================================================
+
+    function getMaxVideoLength(elem) {
+      var w = elem.videoWidth;
+      var h = elem.videoHeight;
+      return w > h ? w : h;
+    }
 
     function getSize(elem) {      
       var rect = elem.getBoundingClientRect();

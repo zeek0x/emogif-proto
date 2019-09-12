@@ -1,3 +1,4 @@
+const fs = require('fs').statSync;
 const execSync = require('child_process').execSync;
 
 function cropOption(input, start, duration, x, y, w, h, fps=30, scale=-1) {
@@ -10,4 +11,9 @@ function cropExec(option, output) {
   const command = `ffmpeg ${option} ${output}`
   execSync(command);
   console.log('Done.');
+}
+
+function getFileSize(filepath) {
+  const stat = statSync(filepath);
+  return stat.size;
 }
