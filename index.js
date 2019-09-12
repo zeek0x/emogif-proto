@@ -5,6 +5,7 @@
     // global
     var SlackEmojiKB = 128;
     var timeUnit = 0.1;
+    var table = document.getElementById("table");
     var fps = document.getElementById("fps");
     var scale = document.getElementById("scale");
     var timer = document.getElementById("timer");
@@ -28,11 +29,7 @@
       timer.value = 0;
       timer.min = start.min = end.min = 0;
       timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
-      setElementW(fps, video.clientWidth/2.5);
-      setElementW(scale, video.clientWidth/2.5);
-      setElementW(timer, video.clientWidth);
-      setElementW(start, video.clientWidth);
-      setElementW(end, video.clientWidth);
+      setElementW(table, video.clientWidth);
       setElementX(overlay, 0);
       setElementY(overlay, 0); 
       setCornerPosition();
