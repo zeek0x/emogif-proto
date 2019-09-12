@@ -1,4 +1,4 @@
-const fs = require('fs').statSync;
+const statSync = require('fs').statSync;
 const execSync = require('child_process').execSync;
 
 function cropOption(input, start, duration, x, y, w, h, fps, scale) {
