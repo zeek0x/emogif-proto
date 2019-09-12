@@ -159,7 +159,7 @@
       var _scale = parseInt(getMaxVideoLength(video) * parseInt(scale.value) / 100);
 
       var option = cropOption(input, ss, duration, x, y, w, h, _fps, _scale);
-      var output = './output.gif'
+      var output = './output.gif';
       cropExec(option, output);
       showResult(option, output);
     }
@@ -168,16 +168,17 @@
     // Result
     // ============================================================
 
-    function showResult(output) {
+    function showResult(option, output) {
       var fileSizeKB = getFileSize(output) / 1024;
 
       if(fileSizeKB > SlackEmojiKB) {
-        var message = `Too BIG File!!! Filesize: ${fileSizeKB.toFixed(2)} [KB]\n`;
-        message += 'To upload this file will be falied.\n';
-        message += 'Adjust FPS or SCALE or START_AND_END';
-        alert(message);
+        var msg = `Too BIG File!!! Filesize: ${fileSizeKB.toFixed(2)} [KB]\n` +
+                  'To upload this file will be falied.\n' +
+                  'Adjust FPS or SCALE or START_AND_END';
+        alert(msg);
       }
 
+      console.log(option);
       window.open(output);
     }
 
