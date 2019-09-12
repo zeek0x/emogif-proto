@@ -44,10 +44,24 @@
   <script src="./index.js"></script>
 </head>
 <body>
-  <div><input type="range" id="fps"><input type="range" id="scale"></div>
-  <div><input type="range" id="timer"></div>
-  <div><input type="range" id="start"></div>
-  <div><input type="range" id="end"></div>
+    <table id="table">
+       <tr>
+      <tr>
+        <th>FPS</th><td><input type="range" id="fps"></td>
+      </tr>
+      <tr>
+        <th>Scale</th><td><input type="range" id="scale"></td>
+      </tr>
+      <tr>
+        <th>Time</th><td><input type="range" id="timer"></td>
+      </tr>
+      <tr>
+        <th>Start</th><td><input type="range" id="start"></td>
+      </tr>
+      <tr>
+        <th>End</th><td><input type="range" id="end"></td>
+      </tr>
+    </table>
   <div id="container">
     <div id="overlay"></div>
     <div id="corner"></div>
