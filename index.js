@@ -5,17 +5,17 @@
     // global
     var SlackEmojiKB = 128;
     var timeUnit = 0.1;
-    var table = document.getElementById("table");
-    var fps = document.getElementById("fps");
-    var scale = document.getElementById("scale");
-    var timer = document.getElementById("timer");
-    var start = document.getElementById("start");
-    var end = document.getElementById("end");
-    var container = document.getElementById("container");
-    var overlay = document.getElementById("overlay");
-    var corner = document.getElementById("corner");
-    var video = document.getElementById("video");
-    var source = document.getElementById("source");
+    var table = document.getElementById('table');
+    var fps = document.getElementById('fps');
+    var scale = document.getElementById('scale');
+    var timer = document.getElementById('timer');
+    var start = document.getElementById('start');
+    var end = document.getElementById('end');
+    var container = document.getElementById('container');
+    var overlay = document.getElementById('overlay');
+    var corner = document.getElementById('corner');
+    var video = document.getElementById('video');
+    var source = document.getElementById('source');
     var isDragging = false;
     var isCornerDragging = false;
 
@@ -32,12 +32,12 @@
 
     video.addEventListener('loadeddata', handleLoadeddataEvent, false);
 
-    function handleLoadeddataEvent() {
+    function handleLoadeddataEvent(event) {
       fps.value = 10;
       fps.min = scale.min = 1;
       fps.max = 30; // TODO: set the video fps
       scale.max = 100; // [%]
-      timer.value = 0;
+      timer.value = start.value = 0;
       timer.min = start.min = end.min = 0;
       timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
       setElementW(table, video.clientWidth);
@@ -50,12 +50,12 @@
     // Timer
     // ============================================================
 
-    timer.addEventListener("input", handleInputEvent, false);
-    start.addEventListener("input", handleInputEvent, false);
-    end.addEventListener("input", handleInputEvent, false);
-    video.addEventListener("click", handleClickEvent, false);
+    timer.addEventListener('input', handleInputEvent, false);
+    start.addEventListener('input', handleInputEvent, false);
+    end.addEventListener('input', handleInputEvent, false);
+    video.addEventListener('click', handleClickEvent, false);
 
-    // Custom Property for "Video is Playing"
+    // Custom Property for 'Video is Playing'
     Object.defineProperty(HTMLMediaElement.prototype, 'playing', {
       get: function() {
         return this.currentTime > 0 && !this.paused && !this.ended;
@@ -66,7 +66,7 @@
       video.currentTime = parseInt(this.value) * timeUnit;
     }
 
-    function handleClickEvent() {
+    function handleClickEvent(event) {
       video.playing ? video.pause() : video.play();
       timer.value = video.currentTime / timeUnit;
     }
@@ -100,15 +100,16 @@
     }
 
     function handleMoveEvent(event) {
-      move(event);
-      zoom(event);
+      if (isDragging) {
+        move(event);
+      }
+
+      if (isCornerDragging) {
+        zoom(event);
+      }
     }
 
     function move(event) {
-      if (!isDragging) {
-        return;
-      }
-
       var p = getPosition(overlay, container);
       var dx = event.movementX;
       var dy = event.movementY;
@@ -118,10 +119,6 @@
     }
 
     function zoom(event) {
-      if (!isCornerDragging) {
-        return;
-      }
-
       var s = getSize(overlay, container);
       var dx = event.movementX;
       setElementW(overlay, s.w + dx);
@@ -155,7 +152,7 @@
       menu.popup(remote.getCurrentWindow());
     }, false);
 
-    function handleCrop() {
+    function handleCrop(event) {
       var s = getSize(overlay);
       var p = getPosition(overlay, container);
 
