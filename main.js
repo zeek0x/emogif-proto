@@ -17,7 +17,9 @@ app.on('ready', function() {
     }
   });
 
-  win.loadURL('file://' + __dirname + '/index.html');
+  const filepath = process.env.EMOGIF || 'video.mp4'
+  win.loadURL(`file://${__dirname}/index.html#${filepath}`);
+  
   win.webContents.openDevTools()
 
   win.on('closed', function() {

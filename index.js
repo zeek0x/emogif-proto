@@ -22,6 +22,17 @@
     init();
 
     function init() {
+      source.src = document.location.hash.replace('#', '');
+      video.load();
+    }
+
+    // ============================================================
+    // Element Style
+    // ============================================================
+
+    video.addEventListener('loadeddata', handleLoadeddataEvent, false);
+
+    function handleLoadeddataEvent() {
       fps.value = 10;
       fps.min = scale.min = 1;
       fps.max = 30; // TODO: set the video fps
