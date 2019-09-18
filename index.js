@@ -22,7 +22,8 @@
     init();
 
     function init() {
-      source.src = document.location.hash.replace('#', '');
+      var urlParams = new URLSearchParams(window.location.search);
+      source.src = decodeURI(urlParams.get('uri'));
       video.load();
     }
 
@@ -143,7 +144,10 @@
     var Menu = remote.Menu;
     var MenuItem = remote.MenuItem;
     var template = [
-      { label: 'crop', click: handleCrop },
+      { label: 'Crop', click: handleCrop },
+      { type: 'separator'},
+      { label: 'Reload', click: handleReload},
+      { label: 'Back', click: handleBack}
     ];
     const menu = Menu.buildFromTemplate(template);
  
@@ -170,6 +174,14 @@
       var output = './output.gif';
       cropExec(option, output);
       showResult(option, output);
+    }
+
+    function handleReload(params) {
+      video.load();
+    }
+
+    function handleBack(params) {
+      window.history.back();
     }
 
     // ============================================================
