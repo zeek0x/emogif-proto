@@ -220,12 +220,6 @@
       return w < h ? w : h;
     }
 
-    function getMaxVideoLength(elem) {
-      var w = elem.videoWidth;
-      var h = elem.videoHeight;
-      return w > h ? w : h;
-    }
-
     function getSize(elem) {      
       var rect = elem.getBoundingClientRect();
       var w = rect.width;
