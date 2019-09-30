@@ -197,7 +197,7 @@
     function showResult(option, output, filePx) {
       var fileSizeKB = getFileSize(output) / 1024;
 
-      if(fileSizeKB > SlackEmojiKB || filePx > SlackEmojiPx) {
+      if(fileSizeKB > SlackEmojiKB || filePx >= SlackEmojiPx) {
         var msg = `Resolution: ${filePx}x${filePx}\n` +
                   `Filesize : ${fileSizeKB.toFixed(2)} [KB]\n` +
                   '\nSlack Emoji "gif" Condition\n' +
