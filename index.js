@@ -4,7 +4,6 @@
   win.onload = function() {
     // global
     var SlackEmojiKB = 128;
-    var SlackEmojiPx = 128;
     var timeUnit = 0.1;
     var table = document.getElementById('table');
     var fps = document.getElementById('fps');
@@ -38,7 +37,7 @@
       fps.value = 10;
       fps.min = scale.min = 1;
       fps.max = 30; // TODO: set the video fps
-      scale.max = getMinVideoLength(video);
+      scale.max = 100; // [%]
       timer.value = start.value = 0;
       timer.min = start.min = end.min = 0;
       timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
@@ -140,18 +139,17 @@
     // ============================================================
     // Menu
     // ============================================================
-
+    
     var remote = require('electron').remote;
+    var Menu = remote.Menu;
     var MenuItem = remote.MenuItem;
     var template = [
       { label: 'Crop', click: handleCrop },
       { type: 'separator'},
-      { label: `Set Scale: ${SlackEmojiPx}px`, click: handleScale },
-      { type: 'separator'},
       { label: 'Reload', click: handleReload},
       { label: 'Back', click: handleBack}
     ];
-    var menu = remote.Menu.buildFromTemplate(template);
+    const menu = Menu.buildFromTemplate(template);
  
     win.addEventListener('contextmenu', function (e) {
       e.preventDefault();
@@ -170,16 +168,12 @@
       var w = s.w;
       var h = s.h;
       var _fps = parseInt(fps.value);
-      var _scale = parseInt(scale.value);
+      var _scale = parseInt(getMaxVideoLength(video) * parseInt(scale.value) / 100);
 
       var option = cropOption(input, ss, duration, x, y, w, h, _fps, _scale);
       var output = './output.gif';
       cropExec(option, output);
-      showResult(option, output, _scale);
-    }
-
-    function handleScale(params) {
-      scale.value = SlackEmojiPx + '';
+      showResult(option, output);
     }
 
     function handleReload(params) {
@@ -194,15 +188,13 @@
     // Result
     // ============================================================
 
-    function showResult(option, output, filePx) {
+    function showResult(option, output) {
       var fileSizeKB = getFileSize(output) / 1024;
 
-      if(fileSizeKB > SlackEmojiKB || filePx >= SlackEmojiPx) {
-        var msg = `Resolution: ${filePx}x${filePx}\n` +
-                  `Filesize : ${fileSizeKB.toFixed(2)} [KB]\n` +
-                  '\nSlack Emoji "gif" Condition\n' +
-                  `  Resolution < ${SlackEmojiPx}x${SlackEmojiPx}\n` +
-                  `  Filesize < ${SlackEmojiKB} KB`;
+      if(fileSizeKB > SlackEmojiKB) {
+        var msg = `Too BIG File!!! Filesize: ${fileSizeKB.toFixed(2)} [KB]\n` +
+                  'To upload this file will be falied.\n' +
+                  'Adjust FPS or SCALE or START_AND_END';
         alert(msg);
       }
 
@@ -214,10 +206,10 @@
     // Element Util
     // ============================================================
 
-    function getMinVideoLength(elem) {
+    function getMaxVideoLength(elem) {
       var w = elem.videoWidth;
       var h = elem.videoHeight;
-      return w < h ? w : h;
+      return w > h ? w : h;
     }
 
     function getSize(elem) {      
