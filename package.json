@@ -21,6 +21,6 @@
   "homepage": "https://github.com/233k/emogif#readme",
   "dependencies": {
     "child_process": "^1.0.2",
-    "electron": "^6.0.7"
+    "electron": "^7.2.4"
   }
 }
