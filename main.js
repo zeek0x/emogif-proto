@@ -17,8 +17,11 @@ app.on('ready', function() {
     }
   });
 
-  win.loadURL(`file://${__dirname}/open.html`);
-  win.webContents.openDevTools();
+  win.loadURL(`file://${__dirname}/index.html`);
+
+  if (process.env.NODE_ENV === "dev") {
+    win.webContents.openDevTools();
+  }
 
   win.on('closed', function() {
     win = null;
