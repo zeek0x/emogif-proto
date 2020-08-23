@@ -10,33 +10,37 @@
     td {
       width: 90%;
     }
-    input {
+    input[type="text"] {
+      width: 80%;
+    }
+    input[type="range"] {
       width: 100%;
     }
     #container {
       position: relative;
-      margin:0px;
-      padding:0px;
+      margin: 0px;
+      padding: 0px;
     }
     #overlay {
-      position:absolute;
-      margin:0px;
-      width:128px;
-      height:128px;
-      min-width:16px;
-      min-height:16px;
+      position: absolute;
+      margin: 0px;
+      padding: 0px;
+      width: 128px;
+      height: 128px;
+      min-width: 16px;
+      min-height: 16px;
       background-color: #ff222266;
-      z-index:100;
+      z-index: 100;
     }
     #corner {
-      position:absolute;
-      margin:0px;
-      width:16px;
-      height:16px;
-      min-width:16px;
-      min-height:16px;
+      position: absolute;
+      margin: 0px;
+      width: 16px;
+      height: 16px;
+      left: 112px;
+      top: 112px;
       background-color: #ff4444ff;
-      z-index:200;
+      z-index: 200;
       cursor: e-resize;
     }
   </style>
@@ -44,7 +48,14 @@
   <script src="./index.js"></script>
 </head>
 <body>
-    <table id="table">      
+  <form action="">
+    <label for="input">Video URI</label>
+    <input type="text" name="uri" size=100 placeholder="https:// | http:// | file://">
+  </from>
+
+  <hr>
+
+  <table id="table">
       <tr><th>FPS  </th><td><input type="range" id="fps"  ></td></tr>
       <tr><th>Scale</th><td><input type="range" id="scale"></td></tr>
       <tr><th>Time </th><td><input type="range" id="timer"></td></tr>
@@ -52,8 +63,9 @@
       <tr><th>End  </th><td><input type="range" id="end"  ></td></tr>
     </table>
   <div id="container">
-    <div id="overlay"></div>
-    <div id="corner"></div>
+    <div id="overlay">
+      <div id="corner"></div>
+    </div>
     <video id="video">
       <source id="source" type="video/mp4">
     </video>

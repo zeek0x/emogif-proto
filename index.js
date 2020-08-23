@@ -23,7 +23,13 @@
 
     function init() {
       var urlParams = new URLSearchParams(window.location.search);
-      source.src = decodeURI(urlParams.get('uri'));
+      var sourceUri = urlParams.get('uri');
+
+      if (sourceUri === null) {
+        return;
+      }
+
+      source.src = decodeURI(sourceUri);
       video.load();
     }
 
@@ -43,8 +49,8 @@
       timer.max = start.max = end.max = parseInt(video.duration) / timeUnit;
       setElementW(table, video.clientWidth);
       setElementX(overlay, 0);
-      setElementY(overlay, 0); 
-      setCornerPosition();
+      setElementY(overlay, 0);
+      setBottomRight(corner);
     }
 
     // ============================================================
@@ -101,48 +107,46 @@
     }
 
     function handleMoveEvent(event) {
-      if (isDragging) {
-        move(event);
-      }
-
       if (isCornerDragging) {
         zoom(event);
+        return;
+      }
+
+      if (isDragging) {
+        move(event);
       }
     }
 
     function move(event) {
-      var p = getPosition(overlay, container);
+      var p = getPosition(overlay);
       var dx = event.movementX;
       var dy = event.movementY;
       setElementX(overlay, p.x + dx);
       setElementY(overlay, p.y + dy);
-      setCornerPosition(overlay);
+      setBottomRight(corner);
     }
 
     function zoom(event) {
-      var s = getSize(overlay, container);
+      var s = getSize(overlay);
       var dx = event.movementX;
       setElementW(overlay, s.w + dx);
       setElementH(overlay, s.w + dx);
-      setCornerPosition(overlay);
-    } 
+      setBottomRight(corner);
+    }
 
-    function setCornerPosition() {
-      var p = getPosition(overlay, container);
-      var os = getSize(overlay);       
-      var cs = getSize(corner);
-      
-      setElementX(corner, p.x + os.w - cs.w);
-      setElementY(corner, p.y + os.h - cs.h);
+    function setBottomRight(child, parent = child.parentNode) {
+      var ps = getSize(parent);
+      var cs = getSize(child);
+      setElementX(child, ps.w - cs.w);
+      setElementY(child, ps.h - cs.h);
     }
 
     // ============================================================
     // Menu
     // ============================================================
-    
+
     var remote = require('electron').remote;
     var Menu = remote.Menu;
-    var MenuItem = remote.MenuItem;
     var template = [
       { label: 'Crop', click: handleCrop },
       { type: 'separator'},
@@ -150,7 +154,7 @@
       { label: 'Back', click: handleBack}
     ];
     const menu = Menu.buildFromTemplate(template);
- 
+
     win.addEventListener('contextmenu', function (e) {
       e.preventDefault();
       menu.popup(remote.getCurrentWindow());
@@ -212,14 +216,14 @@
       return w > h ? w : h;
     }
 
-    function getSize(elem) {      
+    function getSize(elem) {
       var rect = elem.getBoundingClientRect();
       var w = rect.width;
       var h = rect.height;
       return {w, h};
     }
 
-    function getPosition(child, parent) {
+    function getPosition(child, parent = child.parentNode) {
       var rect1 = child.getBoundingClientRect();
       var rect2 = parent.getBoundingClientRect();
       var x = rect1.x - rect2.x;
@@ -227,7 +231,7 @@
       return {x, y};
     }
 
-    function setElementX(e, x) {      
+    function setElementX(e, x) {
       e.style.left = x + 'px';
     }
 
@@ -239,7 +243,7 @@
       e.style.width = w + 'px';
     }
 
-    function setElementH(e, h) {      
+    function setElementH(e, h) {
       e.style.height = h + 'px';
     }
   }
