@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "./node_modules/.bin/electron .",
+    "debug": "export NODE_ENV=dev; ./node_modules/.bin/electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
