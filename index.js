@@ -5,6 +5,7 @@
     // global
     var SlackEmojiKB = 128;
     var timeUnit = 0.1;
+    var uri = document.getElementById('uri');
     var table = document.getElementById('table');
     var fps = document.getElementById('fps');
     var scale = document.getElementById('scale');
@@ -22,14 +23,14 @@
     init();
 
     function init() {
-      var urlParams = new URLSearchParams(window.location.search);
-      var sourceUri = urlParams.get('uri');
+      var params = new URLSearchParams(window.location.search);
+      var uriParam = params.get('uri');
 
-      if (sourceUri === null) {
+      if (uriParam === null) {
         return;
       }
 
-      source.src = decodeURI(sourceUri);
+      uri.value = source.src = decodeURI(uriParam);
       video.load();
     }
 
@@ -60,6 +61,7 @@
     timer.addEventListener('input', handleInputEvent, false);
     start.addEventListener('input', handleInputEvent, false);
     end.addEventListener('input', handleInputEvent, false);
+    video.addEventListener('timeupdate', handleTimeUpdateEvent, false);
     video.addEventListener('click', handleClickEvent, false);
 
     // Custom Property for 'Video is Playing'
@@ -73,9 +75,12 @@
       video.currentTime = parseInt(this.value) * timeUnit;
     }
 
+    function handleTimeUpdateEvent(event) {
+      timer.value = video.currentTime / timeUnit;
+    }
+
     function handleClickEvent(event) {
       video.playing ? video.pause() : video.play();
-      timer.value = video.currentTime / timeUnit;
     }
 
     // ============================================================
